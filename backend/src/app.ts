@@ -1,5 +1,5 @@
 import express from 'express';
-import env from './configs/env';
+import { env } from './configs/env';
 
 const app = express();
 

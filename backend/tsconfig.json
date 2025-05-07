@@ -10,7 +10,8 @@
     "outDir": "dist",
     "removeComments": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmitOnError": true
+    "noEmitOnError": true,
+    "skipLibCheck": true
   },
   "include": ["src/**/*", "types", "src/types.d.ts"],
   "exclude": ["node_modules", "dist"]
