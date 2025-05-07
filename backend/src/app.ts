@@ -1,10 +1,11 @@
-import express from 'express';
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
-import helmet from 'helmet';
-import { errorHandler } from './middlewares/error.middlewares';
-import healthRoutes from './routes/healthCheck.routes';
-import { env } from './configs/env';
+import express from "express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import helmet from "helmet";
+import { errorHandler } from "./middlewares/error.middlewares";
+import healthRoutes from "./routes/healthCheck.routes";
+import authRoutes from "./routes/auth.routes";
+import { env } from "./configs/env";
 
 const app = express();
 
@@ -16,16 +17,17 @@ app.use(
   cors({
     origin: env.CLIENT_URL,
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 
-app.get('/', (req, res) => {
-  res.send('Welcome to Leetlab');
+app.get("/", (req, res) => {
+  res.send("Welcome to Leetlab");
 });
 
-app.use('/api/v1/healthcheck', healthRoutes);
+app.use("/api/v1/healthcheck", healthRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 app.use(errorHandler);
 

@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
-import { ResponseStatus } from '../utils/constants';
-import { logger } from '../configs/logger';
-import { CustomError } from '../utils/CustomError';
+import { Request, Response, NextFunction } from "express";
+import { ResponseStatus } from "../utils/constants";
+import { logger } from "../configs/logger";
+import { CustomError } from "../utils/CustomError";
 
 export const errorHandler = (error: any, req: Request, res: Response, next: NextFunction): void => {
   let customError: CustomError;
@@ -11,7 +11,7 @@ export const errorHandler = (error: any, req: Request, res: Response, next: Next
   } else {
     customError = new CustomError(
       ResponseStatus.InternalServerError,
-      error.message || 'Internal Server Error',
+      error.message || "Internal Server Error",
     );
   }
 
