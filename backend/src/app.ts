@@ -1,5 +1,5 @@
 import express from 'express';
-import { env } from './configs/env';
+import { errorHandler } from './middlewares/error.middlewares';
 
 const app = express();
 
@@ -7,6 +7,6 @@ app.get('/', (req, res) => {
   res.send('Welcome to Leetlab');
 });
 
-console.log(env);
+app.use(errorHandler);
 
 export default app;
