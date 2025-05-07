@@ -24,3 +24,5 @@ Thumbs.db
 
 # Typescript cache
 *.tsbuildinfo
+
+readme.md
