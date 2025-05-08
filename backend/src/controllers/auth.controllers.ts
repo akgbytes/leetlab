@@ -6,7 +6,7 @@ import { CustomError } from "../utils/CustomError";
 import { handleZodError } from "../utils/handleZodError";
 import { validateLogin, validateRegister } from "../validations/auth.validation";
 import { db } from "../db";
-import { usersTable } from "../db/schema";
+import { users } from "../db/schema";
 import { eq } from "drizzle-orm";
 import {
   generateAccessToken,
@@ -21,8 +21,8 @@ export const register = asyncHandler(async (req, res) => {
   logger.info(`Registration attempt for ${email}`);
 
   const [existingUsername, existingEmail] = await Promise.all([
-    await db.select().from(usersTable).where(eq(usersTable.username, username)),
-    await db.select().from(usersTable).where(eq(usersTable.email, email)),
+    await db.select().from(users).where(eq(users.username, username)),
+    await db.select().from(users).where(eq(users.email, email)),
   ]);
 
   if (existingEmail.length) {
@@ -36,7 +36,7 @@ export const register = asyncHandler(async (req, res) => {
   const hashedPassword = await hashPassword(password);
 
   const [user] = await db
-    .insert(usersTable)
+    .insert(users)
     .values({
       username,
       email,
@@ -44,11 +44,11 @@ export const register = asyncHandler(async (req, res) => {
       fullname,
     })
     .returning({
-      id: usersTable.id,
-      username: usersTable.username,
-      email: usersTable.email,
-      fullname: usersTable.fullname,
-      role: usersTable.role,
+      id: users.id,
+      username: users.username,
+      email: users.email,
+      fullname: users.fullname,
+      role: users.role,
     });
 
   logger.info("User registered successfully");
@@ -61,7 +61,7 @@ export const register = asyncHandler(async (req, res) => {
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = handleZodError(validateLogin(req.body));
 
-  const [user] = await db.select().from(usersTable).where(eq(usersTable.email, email));
+  const [user] = await db.select().from(users).where(eq(users.email, email));
 
   if (!user) {
     throw new CustomError(ResponseStatus.Unauthorized, "Invalid credentials");
@@ -77,9 +77,9 @@ export const login = asyncHandler(async (req, res) => {
   const refreshToken = generateRefreshToken(user);
 
   const [updated] = await db
-    .update(usersTable)
+    .update(users)
     .set({ refreshToken })
-    .where(eq(usersTable.email, email))
+    .where(eq(users.email, email))
     .returning();
 
   logger.info(`${updated.username} logged in`);
@@ -93,7 +93,7 @@ export const login = asyncHandler(async (req, res) => {
 
 export const logout = asyncHandler(async (req, res) => {
   const { id } = req.user;
-  const updated = await db.update(usersTable).set({ refreshToken: null });
+  const updated = await db.update(users).set({ refreshToken: null });
 
   if (!updated.rowCount) {
     throw new CustomError(ResponseStatus.NotFound, "User not found");
