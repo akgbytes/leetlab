@@ -10,10 +10,10 @@ import {
   updateProblem,
 } from "../controllers/problem.controllers";
 
-router.post("/create-problem", isLoggedIn, isAdmin, createProblem);
-router.get("/get-all-problem", getAllProblems);
-router.get("/get-problem/:id", getProblemById);
-router.put("/update-problem/:id", isLoggedIn, isAdmin, updateProblem);
-router.delete("/delete-problem/:id", isLoggedIn, isAdmin, deleteProblem);
+router.post("/create", isLoggedIn, isAdmin, createProblem);
+router.get("/get-all", getAllProblems);
+router.get("/get/:id", getProblemById);
+router.put("/update/:id", isLoggedIn, isAdmin, updateProblem);
+router.delete("/delete/:id", isLoggedIn, isAdmin, deleteProblem);
 
 export default router;
