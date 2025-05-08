@@ -25,9 +25,6 @@ export const register = asyncHandler(async (req, res) => {
     await db.select().from(usersTable).where(eq(usersTable.email, email)),
   ]);
 
-  console.log("username: ", existingUsername);
-  console.log("email: ", existingEmail);
-
   if (existingEmail.length) {
     throw new CustomError(ResponseStatus.Conflict, "Email is already registered");
   }
@@ -57,8 +54,8 @@ export const register = asyncHandler(async (req, res) => {
   logger.info("User registered successfully");
 
   res
-    .status(ResponseStatus.Success)
-    .json(new ApiResponse(ResponseStatus.Success, "User registered successfully", user));
+    .status(ResponseStatus.Created)
+    .json(new ApiResponse(ResponseStatus.Created, "User registered successfully", user));
 });
 
 export const login = asyncHandler(async (req, res) => {
@@ -79,14 +76,13 @@ export const login = asyncHandler(async (req, res) => {
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
 
-  const [kk] = await db
+  const [updated] = await db
     .update(usersTable)
-    .set({ refreshToken: "aaa" })
+    .set({ refreshToken })
     .where(eq(usersTable.email, email))
     .returning();
-  console.log(kk);
 
-  logger.info(`${user.username} logged in`);
+  logger.info(`${updated.username} logged in`);
 
   res
     .status(ResponseStatus.Success)
