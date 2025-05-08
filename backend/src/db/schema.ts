@@ -25,7 +25,7 @@ export const users = pgTable("users", {
 
 export const problems = pgTable("problems", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  title: varchar(),
+  title: varchar().unique(),
   description: varchar(),
   difficulty: difficultyEnum().notNull().default("easy"),
   tags: text("tags")
