@@ -1,7 +1,8 @@
 import app from "./app";
+import { env } from "./configs/env";
 import { logger } from "./configs/logger";
 
-const PORT = 8080;
+const PORT = env.PORT;
 
 app.listen(PORT, () => {
   logger.info(`Server running on port ${PORT}`);

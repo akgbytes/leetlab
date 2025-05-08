@@ -1,5 +1,5 @@
 import { integer, pgEnum, pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
-import { InferInsertModel, InferSelectModel } from "drizzle-orm";
+import { InferSelectModel } from "drizzle-orm";
 
 export const rolesEnum = pgEnum("roles", ["user", "admin"]);
 

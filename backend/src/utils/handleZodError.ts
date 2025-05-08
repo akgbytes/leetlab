@@ -4,22 +4,17 @@ import { ResponseStatus } from "./constants";
 
 export const handleZodError = <T>(result: SafeParseReturnType<unknown, T>): T => {
   if (!result.success) {
-    const missing =
-      result.error.issues[0].code === "invalid_type" &&
-      result.error.issues[0].received === "undefined";
+    const firstIssue = result.error.issues[0];
 
-    if (missing) {
-      if (result.error.issues[0].path.length) {
-        throw new CustomError(
-          ResponseStatus.InternalServerError,
-          `Missing ${result.error.issues[0].path} field`,
-        );
+    if (firstIssue.code === "invalid_type" && firstIssue.received === "undefined") {
+      if (firstIssue.path.length) {
+        throw new CustomError(ResponseStatus.BadRequest, `Missing ${firstIssue.path} field`);
       } else {
-        throw new CustomError(ResponseStatus.InternalServerError, `Missing required field`);
+        throw new CustomError(ResponseStatus.BadRequest, "Missing required field");
       }
     }
 
-    throw new CustomError(ResponseStatus.BadRequest, result.error.issues[0].message);
+    throw new CustomError(ResponseStatus.UnprocessableEntity, firstIssue.message);
   }
 
   return result.data;

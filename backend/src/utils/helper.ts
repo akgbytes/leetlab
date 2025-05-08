@@ -6,7 +6,7 @@ import { decodedUser } from "../types";
 
 export const hashPassword = async (password: string) => await argon2.hash(password);
 
-export const passwordMatch = async (enteredPassword: string, storedPassword: string) =>
+export const passwordMatch = async (storedPassword: string, enteredPassword: string) =>
   argon2.verify(storedPassword, enteredPassword);
 
 export const generateAccessToken = (user: decodedUser) =>
