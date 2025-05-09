@@ -4,6 +4,8 @@ import { InferSelectModel, relations, sql } from "drizzle-orm";
 export const rolesEnum = pgEnum("roles", ["user", "admin"]);
 export const difficultyEnum = pgEnum("difficulty", ["easy", "medium", "hard"]);
 
+const kk = difficultyEnum.enumValues;
+
 const timestamps = {
   updated_at: timestamp()
     .defaultNow()

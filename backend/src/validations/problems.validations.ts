@@ -8,7 +8,7 @@ const jsonSchema: z.ZodType<Json> = z.lazy(() =>
   z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)]),
 );
 
-const problemsSchema = z.object({
+const problemSchema = z.object({
   title: z.string().nonempty(),
   description: z.string().nonempty(),
   difficulty: z.enum(difficultyEnum.enumValues),
@@ -22,6 +22,10 @@ const problemsSchema = z.object({
   referenceSolutions: jsonSchema,
 });
 
-export type Problem = z.infer<typeof problemsSchema>;
+const updateProblemSchema = problemSchema.partial();
 
-export const validateProblemData = (data: Problem) => problemsSchema.safeParse(data);
+export type Problem = z.infer<typeof problemSchema>;
+
+export const validateProblemData = (data: Problem) => problemSchema.safeParse(data);
+export const validateUpdateProblemData = (data: Partial<Problem>) =>
+  updateProblemSchema.safeParse(data);
